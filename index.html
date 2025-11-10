@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Musical Bouncing Balls</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -10,12 +10,17 @@
             background-color: #0f172a;
             color: #e2e8f0;
             font-family: 'Inter', sans-serif;
-            overflow: hidden;
+            overflow: hidden; /* Prevent scroll on entire page */
+            touch-action: none; /* Prevent bounce effects on iOS */
+        }
+        #canvasContainer {
+            touch-action: none; /* Crucial for mobile games */
         }
         canvas {
             display: block;
             cursor: crosshair;
             transition: filter 0.3s ease;
+            touch-action: none;
         }
         /* Custom switch styling */
         .switch {
@@ -65,13 +70,27 @@
         }
     </style>
 </head>
-<body class="h-screen flex flex-col md:flex-row">
+<body class="h-screen w-screen flex">
 
-    <!-- Controls Sidebar -->
-    <div class="w-full md:w-80 bg-slate-800 p-6 flex flex-col gap-6 shadow-xl z-10 overflow-y-auto" style="min-width: 320px;">
-        <div>
-            <h1 class="text-2xl font-bold text-blue-400 mb-2">Rhythm Balls V5</h1>
-            <p class="text-sm text-slate-400">Balls gate the music on impact.</p>
+    <!-- Mobile Menu Toggle (Visible only on small screens) -->
+    <button id="menuToggle" class="md:hidden absolute top-4 left-4 z-50 p-3 bg-slate-800/80 backdrop-blur text-blue-400 rounded-full shadow-lg border border-slate-600">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </button>
+
+    <!-- Mobile Overlay (for closing sidebar) -->
+    <div id="mobileOverlay" class="fixed inset-0 bg-black/50 z-30 hidden md:hidden opacity-0 transition-opacity duration-300"></div>
+
+    <!-- Controls Sidebar (Drawer on mobile, static on desktop) -->
+    <div id="sidebar" class="fixed inset-y-0 left-0 z-40 w-80 transform -translate-x-full transition-transform duration-300 ease-in-out md:relative md:translate-x-0 bg-slate-800 p-6 flex flex-col gap-6 shadow-2xl md:shadow-xl overflow-y-auto">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold text-blue-400 mb-1">Rhythm Balls</h1>
+                <p class="text-xs text-slate-400">V5 - Mobile Ready</p>
+            </div>
+            <!-- Close Button (Mobile only) -->
+            <button id="closeMenu" class="md:hidden p-2 text-slate-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
         </div>
 
         <!-- Audio Section -->
@@ -212,17 +231,39 @@
     </div>
 
     <!-- Canvas Container -->
-    <div class="flex-grow relative bg-slate-900" id="canvasContainer">
+    <div class="flex-grow relative bg-slate-900 w-full" id="canvasContainer">
         <canvas id="gameCanvas" class="w-full h-full"></canvas>
         <div id="tutorial" class="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/50 transition-opacity duration-500 opacity-100 z-20">
             <div class="text-center p-6 bg-slate-800 rounded-2xl border border-slate-600 shadow-2xl max-w-md mx-4">
                 <h3 class="text-xl font-bold text-white mb-2">Rhythm Balls V5</h3>
                 <p class="text-slate-300 mb-4">1. Upload a song.<br>2. Customize Theme & Physics.<br>3. Click Start to drop balls!</p>
+                <p class="text-blue-400 text-sm md:hidden animate-pulse">Tap the menu icon ☰ to start!</p>
             </div>
         </div>
     </div>
 
     <script>
+        // --- Mobile Menu Logic ---
+        const sidebar = document.getElementById('sidebar');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        const menuToggle = document.getElementById('menuToggle');
+
+        function toggleMenu(show) {
+            if (show) {
+                sidebar.classList.remove('-translate-x-full');
+                mobileOverlay.classList.remove('hidden');
+                setTimeout(() => mobileOverlay.classList.remove('opacity-0'), 10);
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                mobileOverlay.classList.add('opacity-0');
+                setTimeout(() => mobileOverlay.classList.add('hidden'), 300);
+            }
+        }
+
+        menuToggle.addEventListener('click', () => toggleMenu(true));
+        document.getElementById('closeMenu').addEventListener('click', () => toggleMenu(false));
+        mobileOverlay.addEventListener('click', () => toggleMenu(false));
+
         // --- Configuration & State ---
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
@@ -602,7 +643,11 @@
                 document.getElementById('ballCount').textContent = `Balls: ${balls.length} (Max ${MAX_BALLS})`;
             }
         };
-        document.getElementById('startBtn').addEventListener('click', interact);
+        document.getElementById('startBtn').addEventListener('click', (e) => {
+             // Close menu automatically on mobile when starting from the button
+             if (window.innerWidth < 768) toggleMenu(false);
+             interact(e);
+        });
         canvas.addEventListener('mousedown', interact);
         canvas.addEventListener('touchstart', interact, {passive:false});
         document.getElementById('clearBtn').addEventListener('click', () => {
