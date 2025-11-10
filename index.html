@@ -15,6 +15,7 @@
         canvas {
             display: block;
             cursor: crosshair;
+            transition: background-color 0.5s ease;
         }
         /* Custom switch styling */
         .switch {
@@ -54,6 +55,14 @@
         input:checked + .slider:before {
             transform: translateX(16px);
         }
+        /* Custom select styling */
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%202000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%233b82f6%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.7rem top 50%;
+            background-size: 0.65rem auto;
+        }
     </style>
 </head>
 <body class="h-screen flex flex-col md:flex-row">
@@ -61,7 +70,7 @@
     <!-- Controls Sidebar -->
     <div class="w-full md:w-80 bg-slate-800 p-6 flex flex-col gap-6 shadow-xl z-10 overflow-y-auto" style="min-width: 320px;">
         <div>
-            <h1 class="text-2xl font-bold text-blue-400 mb-2">Rhythm Balls V2.1</h1>
+            <h1 class="text-2xl font-bold text-blue-400 mb-2">Rhythm Balls V3</h1>
             <p class="text-sm text-slate-400">Balls gate the music on impact.</p>
         </div>
 
@@ -82,6 +91,21 @@
             </div>
         </div>
 
+        <!-- Terrain Section -->
+        <div class="bg-slate-700/50 p-4 rounded-xl border border-slate-600">
+            <h2 class="font-semibold mb-3 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-400"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                Environment
+            </h2>
+            <select id="terrainSelect" class="w-full bg-slate-800 border border-slate-600 text-slate-200 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
+                <option value="earth" selected>🌎 Earth (Normal)</option>
+                <option value="moon">🌑 Moon (Low Gravity)</option>
+                <option value="rubber">🥎 Rubber Room (Bouncy)</option>
+                <option value="slime">🦠 Thick Slime (High Drag)</option>
+                <option value="ice">❄️ Ice (Slippery)</option>
+            </select>
+        </div>
+
         <!-- Modes Section -->
         <div class="bg-slate-700/50 p-4 rounded-xl border border-slate-600 flex-grow">
             <h2 class="font-semibold mb-4 flex items-center gap-2">
@@ -93,7 +117,7 @@
                 <div class="flex items-center justify-between">
                     <div class="flex flex-col">
                         <span class="text-sm font-medium">No Friction</span>
-                        <span class="text-xs text-slate-400">Bounce forever</span>
+                        <span class="text-xs text-slate-400">Zero drag override</span>
                     </div>
                     <label class="switch">
                         <input type="checkbox" id="modeNoFriction">
@@ -158,12 +182,12 @@
     </div>
 
     <!-- Canvas Container -->
-    <div class="flex-grow relative bg-slate-900">
+    <div class="flex-grow relative bg-slate-900" id="canvasContainer">
         <canvas id="gameCanvas" class="w-full h-full"></canvas>
         <div id="tutorial" class="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/50 transition-opacity duration-500 opacity-100">
             <div class="text-center p-6 bg-slate-800 rounded-2xl border border-slate-600 shadow-2xl max-w-md mx-4">
-                <h3 class="text-xl font-bold text-white mb-2">Rhythm Balls V2.1</h3>
-                <p class="text-slate-300 mb-4">1. Upload a song.<br>2. Click Start to drop balls.<br>3. Music plays only when balls bounce!</p>
+                <h3 class="text-xl font-bold text-white mb-2">Rhythm Balls V3</h3>
+                <p class="text-slate-300 mb-4">1. Upload a song.<br>2. Select your environment.<br>3. Click Start to drop balls!</p>
             </div>
         </div>
     </div>
@@ -174,12 +198,19 @@
         const ctx = canvas.getContext('2d');
         let balls = [];
         const MAX_BALLS = 200; 
-        
-        // Adjusted Physics for better "off" state feel
-        const GRAVITY = 0.4;
-        const FRICTION = 0.98;      // More air resistance so they don't feel like they are speeding up naturally
-        const BASE_BOUNCE = 0.6;    // Lose more energy by default
-        const SUPER_BOUNCE = 1.15;  // Gain energy when active
+
+        // --- Terrain Definitions ---
+        const TERRAINS = {
+            earth:  { gravity: 0.4,  friction: 0.98,  bounce: 0.6,  bg: '#0f172a' },
+            moon:   { gravity: 0.08, friction: 0.995, bounce: 0.8,  bg: '#1e293b' },
+            rubber: { gravity: 0.4,  friction: 0.98,  bounce: 0.95, bg: '#312e81' },
+            slime:  { gravity: 0.5,  friction: 0.92,  bounce: 0.2,  bg: '#064e3b' },
+            ice:    { gravity: 0.4,  friction: 0.999, bounce: 0.6,  bg: '#0c4a6e' }
+        };
+        let currentTerrain = TERRAINS.earth;
+
+        // Modes that override base physics on impact
+        const SUPER_BOUNCE_VAL = 1.15;
 
         let modes = {
             noFriction: false,
@@ -189,12 +220,12 @@
             multiply: false
         };
 
-        // --- New Audio Engine (Gated Loop) ---
+        // --- Audio Engine (Gated Loop) ---
         let audioCtx = null;
         let audioBuffer = null;
-        let sourceNode = null;    // The continuously looping song
-        let gateNode = null;      // The gate that opens on impact
-        let masterGain = null;    // Volume slider control
+        let sourceNode = null;
+        let gateNode = null;
+        let masterGain = null;
         let isPlaying = false;
 
         // --- Setup ---
@@ -209,27 +240,19 @@
         async function initAudio() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                
                 masterGain = audioCtx.createGain();
                 masterGain.connect(audioCtx.destination);
-                
                 gateNode = audioCtx.createGain();
-                gateNode.gain.value = 0.0; // Start silent
+                gateNode.gain.value = 0.0;
                 gateNode.connect(masterGain);
-
                 updateVolume();
             }
-            if (audioCtx.state === 'suspended') {
-                await audioCtx.resume();
-            }
+            if (audioCtx.state === 'suspended') await audioCtx.resume();
         }
 
         function startBackgroundLoop() {
             if (!audioCtx || !audioBuffer || isPlaying) return;
-            
-            // Stop old source if it exists somehow
             if (sourceNode) { try { sourceNode.stop(); } catch(e) {} }
-
             sourceNode = audioCtx.createBufferSource();
             sourceNode.buffer = audioBuffer;
             sourceNode.loop = true;
@@ -241,7 +264,6 @@
         document.getElementById('audioInput').addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (!file) return;
-
             const status = document.getElementById('audioStatus');
             status.textContent = "Loading... wait.";
             status.className = "text-xs text-blue-400 loading-pulse";
@@ -257,7 +279,6 @@
                 audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
                 status.textContent = `Ready: ${file.name.substring(0, 25)}`;
                 status.className = "text-xs text-green-400";
-                // We don't auto-start here; wait for user interaction (browser policy best practice)
             } catch (err) {
                 status.textContent = "Error loading audio.";
                 status.className = "text-xs text-red-400";
@@ -271,29 +292,16 @@
         });
 
         function updateVolume() {
-            if (masterGain) {
-                masterGain.gain.value = document.getElementById('volumeSlider').value;
-            }
+            if (masterGain) masterGain.gain.value = document.getElementById('volumeSlider').value;
         }
 
-        // The new impact sound just opens the gate for a moment
-        function openAudioGate(intensity = 1) {
+        function openAudioGate() {
             if (!audioCtx || !gateNode) return;
-            
-            // Ensure loop is running if it hasn't started yet
-            if (!isPlaying && audioBuffer) {
-                startBackgroundLoop();
-            }
-
+            if (!isPlaying && audioBuffer) startBackgroundLoop();
             const now = audioCtx.currentTime;
-            // Cancel any scheduled silence
             gateNode.gain.cancelScheduledValues(now);
-            
-            // Instantly jump to volume
             gateNode.gain.setValueAtTime(gateNode.gain.value, now);
             gateNode.gain.linearRampToValueAtTime(1.0, now + 0.005);
-            
-            // Decay back to silence.
             gateNode.gain.setTargetAtTime(0, now + 0.05, 0.25); 
         }
 
@@ -316,7 +324,6 @@
                 ctx.fillStyle = this.color;
                 ctx.fill();
                 ctx.closePath();
-                
                 ctx.beginPath();
                 ctx.arc(this.x - this.radius*0.3, this.y - this.radius*0.3, this.radius*0.25, 0, Math.PI * 2);
                 ctx.fillStyle = 'rgba(255,255,255,0.4)';
@@ -325,11 +332,12 @@
             }
 
             update() {
-                this.vy += GRAVITY;
+                // Apply Terrain Physics
+                this.vy += currentTerrain.gravity;
                 
-                // Only apply air friction if No Friction mode is OFF
+                // Apply friction (No Friction mode overrides terrain friction)
                 if (!modes.noFriction) {
-                    this.vx *= FRICTION;
+                    this.vx *= currentTerrain.friction;
                 }
 
                 this.x += this.vx;
@@ -342,12 +350,13 @@
                 if (this.y + this.radius > canvas.height) {
                     this.y = canvas.height - this.radius;
                     impactVelocity = Math.abs(this.vy);
-                    // Always bounce if No Friction is ON, otherwise check velocity threshold
-                    if (modes.noFriction || impactVelocity > 1) {
+                    // Determine if it should bounce or just roll based on terrain gravity
+                    let bounceThreshold = currentTerrain.gravity * 2.5; 
+                    if (modes.noFriction || impactVelocity > bounceThreshold) {
                         this.handleImpact('vertical');
                         bounced = true;
                     } else {
-                        this.vy = 0;
+                        this.vy = 0; // Stabilize
                     }
                 }
                 // Ceiling
@@ -374,13 +383,13 @@
             handleImpact(axis) {
                 openAudioGate();
 
-                // --- Apply Physics ---
-                let currentBounce = BASE_BOUNCE;
+                // Determine base bounce from terrain or overrides
+                let currentBounce = currentTerrain.bounce;
                 
                 if (modes.superBounce) {
-                    currentBounce = SUPER_BOUNCE;
+                    currentBounce = SUPER_BOUNCE_VAL;
                 } else if (modes.noFriction) {
-                    currentBounce = 1.0; // Perfect elastic collision
+                    currentBounce = 1.0; 
                 }
                 
                 if (axis === 'vertical') {
@@ -415,15 +424,19 @@
 
         // --- Main Loop ---
         function loop() {
-            ctx.fillStyle = 'rgba(15, 23, 42, 0.35)';
+            // Convert hex bg to rgba for trail effect
+            let hex = currentTerrain.bg;
+            let r = parseInt(hex.slice(1, 3), 16);
+            let g = parseInt(hex.slice(3, 5), 16);
+            let b = parseInt(hex.slice(5, 7), 16);
+            ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 0.35)`;
+            
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             let ballsToSpawn = 0;
-            
             for (let i = 0; i < balls.length; i++) {
-                let spawnRequested = balls[i].update();
+                if (balls[i].update() === true) ballsToSpawn++;
                 balls[i].draw();
-                if (spawnRequested === true) ballsToSpawn++;
             }
 
             if (ballsToSpawn > 0 && modes.multiply === true) {
@@ -441,26 +454,26 @@
                 }
                 document.getElementById('ballCount').textContent = `Balls: ${balls.length} (Max ${MAX_BALLS})`;
             }
-
             requestAnimationFrame(loop);
         }
 
-        // --- Controls ---
+        // --- Controls Handlers ---
+        document.getElementById('terrainSelect').addEventListener('change', (e) => {
+            currentTerrain = TERRAINS[e.target.value];
+            // Update canvas background immediately for better feel
+            document.getElementById('canvasContainer').style.backgroundColor = currentTerrain.bg;
+        });
+
         ['modeNoFriction', 'modeBounce', 'modeSpeed', 'modeGrow', 'modeMultiply'].forEach(id => {
              const el = document.getElementById(id);
              // Initial sync
-             if(id === 'modeNoFriction') modes.noFriction = el.checked;
-             if(id === 'modeBounce') modes.superBounce = el.checked;
-             if(id === 'modeSpeed') modes.speedUp = el.checked;
-             if(id === 'modeGrow') modes.grow = el.checked;
-             if(id === 'modeMultiply') modes.multiply = el.checked;
+             let prop = id.replace('mode', '');
+             prop = prop.charAt(0).toLowerCase() + prop.slice(1);
+             if (prop === 'bounce') prop = 'superBounce'; // fixing mismatch in naming conventions I made earlier
+             modes[prop] = el.checked;
 
              el.addEventListener('change', (e) => {
-                 if(id === 'modeNoFriction') modes.noFriction = e.target.checked;
-                 if(id === 'modeBounce') modes.superBounce = e.target.checked;
-                 if(id === 'modeSpeed') modes.speedUp = e.target.checked;
-                 if(id === 'modeGrow') modes.grow = e.target.checked;
-                 if(id === 'modeMultiply') modes.multiply = e.target.checked;
+                 modes[prop] = e.target.checked;
              });
         });
 
