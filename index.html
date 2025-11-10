@@ -15,7 +15,7 @@
         canvas {
             display: block;
             cursor: crosshair;
-            transition: background-color 0.5s ease;
+            transition: filter 0.3s ease;
         }
         /* Custom switch styling */
         .switch {
@@ -70,12 +70,12 @@
     <!-- Controls Sidebar -->
     <div class="w-full md:w-80 bg-slate-800 p-6 flex flex-col gap-6 shadow-xl z-10 overflow-y-auto" style="min-width: 320px;">
         <div>
-            <h1 class="text-2xl font-bold text-blue-400 mb-2">Rhythm Balls V4</h1>
+            <h1 class="text-2xl font-bold text-blue-400 mb-2">Rhythm Balls V5</h1>
             <p class="text-sm text-slate-400">Balls gate the music on impact.</p>
         </div>
 
         <!-- Audio Section -->
-        <div class="bg-slate-700/50 p-4 rounded-xl border border-slate-600">
+        <div class="bg-slate-700/50 p-4 rounded-xl border border-slate-600 shrink-0">
             <h2 class="font-semibold mb-3 flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-400"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
                 Music Source
@@ -91,44 +91,59 @@
             </div>
         </div>
 
-        <!-- Environment Section -->
-        <div class="bg-slate-700/50 p-4 rounded-xl border border-slate-600 flex flex-col gap-4">
+        <!-- Customization Section -->
+        <div class="bg-slate-700/50 p-4 rounded-xl border border-slate-600 flex flex-col gap-4 shrink-0">
             <div>
                 <h2 class="font-semibold mb-2 flex items-center gap-2 text-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-400"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
-                    Terrain (Physics)
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-400"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/></svg>
+                    Visual Theme
                 </h2>
-                <select id="terrainSelect" class="w-full bg-slate-800 border border-slate-600 text-slate-200 text-sm rounded-lg p-2.5">
-                    <option value="earth" selected>🌎 Earth (Normal)</option>
-                    <option value="moon">🌑 Moon (Low Gravity)</option>
-                    <option value="rubber">🥎 Rubber Room (Bouncy)</option>
-                    <option value="slime">🦠 Thick Slime (High Drag)</option>
-                    <option value="ice">❄️ Ice (Slippery)</option>
+                <select id="themeSelect" class="w-full bg-slate-800 border border-slate-600 text-slate-200 text-sm rounded-lg p-2.5">
+                    <option value="classic" selected>✨ Classic</option>
+                    <option value="neon">🌃 Neon Nights</option>
+                    <option value="wood">🪵 Wooden Toy</option>
+                    <option value="terminal">📟 Terminal</option>
+                    <option value="bubblegum">🍬 Bubblegum</option>
                 </select>
             </div>
-            <div>
-                <h2 class="font-semibold mb-2 flex items-center gap-2 text-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-pink-400"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg>
-                    Container (Shape)
-                </h2>
-                <select id="containerSelect" class="w-full bg-slate-800 border border-slate-600 text-slate-200 text-sm rounded-lg p-2.5">
-                    <option value="window" selected>🖥️ Window</option>
-                    <option value="square">🔲 Square</option>
-                    <option value="circle">⭕ Circle</option>
-                    <option value="triangle">🔺 Triangle</option>
-                    <option value="rotating-square">🔄 Rotating Square</option>
-                </select>
+             <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <h2 class="font-semibold mb-2 flex items-center gap-2 text-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-400"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                        Physics
+                    </h2>
+                    <select id="terrainSelect" class="w-full bg-slate-800 border border-slate-600 text-slate-200 text-sm rounded-lg p-2.5">
+                        <option value="earth" selected>Earth</option>
+                        <option value="moon">Moon</option>
+                        <option value="rubber">Rubber</option>
+                        <option value="slime">Slime</option>
+                        <option value="ice">Ice</option>
+                    </select>
+                </div>
+                <div>
+                    <h2 class="font-semibold mb-2 flex items-center gap-2 text-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-pink-400"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg>
+                        Shape
+                    </h2>
+                    <select id="containerSelect" class="w-full bg-slate-800 border border-slate-600 text-slate-200 text-sm rounded-lg p-2.5">
+                        <option value="window" selected>Window</option>
+                        <option value="square">Square</option>
+                        <option value="circle">Circle</option>
+                        <option value="triangle">Triangle</option>
+                        <option value="rotating-square">Spin Sq.</option>
+                    </select>
+                </div>
             </div>
         </div>
 
         <!-- Modes Section -->
-        <div class="bg-slate-700/50 p-4 rounded-xl border border-slate-600">
+        <div class="bg-slate-700/50 p-4 rounded-xl border border-slate-600 flex-grow overflow-y-auto min-h-[200px]">
             <h2 class="font-semibold mb-4 flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-400"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg>
                 Impact Modes
             </h2>
             
-            <div class="space-y-6">
+            <div class="space-y-5">
                 <div class="flex items-center justify-between">
                     <div class="flex flex-col gap-1">
                         <span class="text-sm font-medium">No Friction</span>
@@ -201,8 +216,8 @@
         <canvas id="gameCanvas" class="w-full h-full"></canvas>
         <div id="tutorial" class="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/50 transition-opacity duration-500 opacity-100 z-20">
             <div class="text-center p-6 bg-slate-800 rounded-2xl border border-slate-600 shadow-2xl max-w-md mx-4">
-                <h3 class="text-xl font-bold text-white mb-2">Rhythm Balls V4</h3>
-                <p class="text-slate-300 mb-4">1. Upload a song.<br>2. Select Terrain & Container.<br>3. Click Start to drop balls!</p>
+                <h3 class="text-xl font-bold text-white mb-2">Rhythm Balls V5</h3>
+                <p class="text-slate-300 mb-4">1. Upload a song.<br>2. Customize Theme & Physics.<br>3. Click Start to drop balls!</p>
             </div>
         </div>
     </div>
@@ -214,6 +229,105 @@
         let balls = [];
         const MAX_BALLS = 200; 
 
+        // --- THEME SYSTEM Definitions ---
+        const THEMES = {
+            classic: {
+                bg: (terrain) => terrain.bg, // Dynamic based on terrain
+                fadeColor: (terrain) => {
+                     // Convert hex bg to rgba for trail effect
+                    let hex = terrain.bg;
+                    let r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16);
+                    return `rgba(${r}, ${g}, ${b}, 0.35)`;
+                },
+                containerStyle: (ctx) => {
+                    ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 3; ctx.shadowBlur = 0; ctx.setLineDash([]);
+                },
+                ballColor: () => `hsl(${Math.random() * 360}, 85%, 60%)`,
+                drawBall: (ctx, ball) => {
+                    ctx.shadowBlur = 0;
+                    ctx.beginPath(); ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI*2);
+                    ctx.fillStyle = ball.color; ctx.fill(); ctx.closePath();
+                    // Shine
+                    ctx.beginPath(); ctx.arc(ball.x - ball.radius*0.3, ball.y - ball.radius*0.3, ball.radius*0.25, 0, Math.PI*2);
+                    ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.fill(); ctx.closePath();
+                }
+            },
+            neon: {
+                bg: () => '#09090b',
+                fadeColor: () => 'rgba(9, 9, 11, 0.25)', // Darker fade for stronger trails
+                containerStyle: (ctx) => {
+                    ctx.strokeStyle = '#0ff'; ctx.lineWidth = 4; ctx.shadowColor = '#0ff'; ctx.shadowBlur = 20; ctx.setLineDash([]);
+                },
+                ballColor: () => `hsl(${Math.random() * 360}, 100%, 50%)`,
+                drawBall: (ctx, ball) => {
+                    ctx.shadowColor = ball.color; ctx.shadowBlur = 25;
+                    ctx.beginPath(); ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI*2);
+                    ctx.fillStyle = '#fff'; ctx.fill(); // White center for intense neon look
+                    ctx.lineWidth = 3; ctx.strokeStyle = ball.color; ctx.stroke(); ctx.closePath();
+                }
+            },
+            wood: {
+                bg: () => '#785c38', // Matte brown
+                fadeColor: () => 'rgba(120, 92, 56, 0.5)',
+                containerStyle: (ctx) => {
+                    ctx.strokeStyle = '#3f2e18'; ctx.lineWidth = 8; ctx.shadowBlur = 0; ctx.setLineDash([]);
+                },
+                ballColor: () => {
+                    // Earthy wood tones
+                    const hues = [30, 40, 25, 45];
+                    return `hsl(${hues[Math.floor(Math.random()*hues.length)]}, ${40 + Math.random()*20}%, ${40 + Math.random()*30}%)`;
+                },
+                drawBall: (ctx, ball) => {
+                    ctx.shadowBlur = 0;
+                    ctx.beginPath(); ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI*2);
+                    ctx.fillStyle = ball.color; ctx.fill(); 
+                    ctx.strokeStyle = '#3f2e18'; ctx.lineWidth = 2; ctx.stroke(); ctx.closePath();
+                    // Simple wood grain effect
+                    ctx.beginPath(); ctx.moveTo(ball.x - ball.radius*0.5, ball.y - ball.radius*0.2);
+                    ctx.quadraticCurveTo(ball.x, ball.y, ball.x + ball.radius*0.5, ball.y - ball.radius*0.3);
+                    ctx.strokeStyle = 'rgba(63, 46, 24, 0.3)'; ctx.lineWidth = 2; ctx.stroke();
+                }
+            },
+            terminal: {
+                bg: () => '#000000',
+                fadeColor: () => 'rgba(0, 0, 0, 0.4)',
+                containerStyle: (ctx) => {
+                    ctx.strokeStyle = '#22c55e'; ctx.lineWidth = 2; ctx.shadowBlur = 0; 
+                     // Dashed lines for old school feel
+                },
+                ballColor: () => '#22c55e', // All green
+                drawBall: (ctx, ball) => {
+                    ctx.shadowBlur = 0;
+                    ctx.beginPath(); ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI*2);
+                    ctx.strokeStyle = '#22c55e'; ctx.lineWidth = 2; ctx.stroke(); 
+                    ctx.fillStyle = '#000'; ctx.fill(); ctx.closePath();
+                    // ASCII character in middle
+                    ctx.font = `${Math.max(10, ball.radius)}px monospace`;
+                    ctx.fillStyle = '#22c55e'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+                    ctx.fillText(String.fromCharCode(65 + Math.floor(Math.random()*26)), ball.x, ball.y);
+                }
+            },
+            bubblegum: {
+                bg: () => '#fce7f3', // Pink 100
+                fadeColor: () => 'rgba(252, 231, 243, 0.4)',
+                containerStyle: (ctx) => {
+                    ctx.strokeStyle = '#f472b6'; ctx.lineWidth = 6; ctx.shadowColor = '#fbcfe8'; ctx.shadowBlur = 10; ctx.lineCap = 'round'; ctx.setLineDash([]);
+                },
+                ballColor: () => `hsl(${300 + Math.random() * 60}, 100%, 85%)`, // Pastels
+                drawBall: (ctx, ball) => {
+                    ctx.shadowBlur = 0;
+                    ctx.beginPath(); ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI*2);
+                    ctx.fillStyle = ball.color; ctx.fill();
+                    ctx.strokeStyle = '#fff'; ctx.lineWidth = 4; ctx.stroke(); ctx.closePath();
+                    // Cute highlight
+                    ctx.beginPath(); ctx.ellipse(ball.x - ball.radius*0.3, ball.y - ball.radius*0.3, ball.radius*0.2, ball.radius*0.1, Math.PI/4, 0, Math.PI*2);
+                     ctx.fillStyle = 'white'; ctx.fill();
+                }
+            }
+        };
+        let currentTheme = THEMES.classic;
+
+
         // --- Physics Constants ---
         const TERRAINS = {
             earth:  { gravity: 0.4,  friction: 0.98,  bounce: 0.6,  bg: '#0f172a' },
@@ -224,7 +338,7 @@
         };
         let currentTerrain = TERRAINS.earth;
         let currentContainerType = 'window';
-        let containerAngle = 0; // For rotating square
+        let containerAngle = 0;
 
         const SUPER_BOUNCE_VAL = 1.15;
         let modes = {
@@ -248,201 +362,105 @@
         // --- Container Logic ---
         const containers = {
             window: {
-                draw: () => {}, // Nothing to draw, it's the canvas
+                draw: () => {}, // Nothing to draw
                 check: (ball) => {
                     let bounced = false;
-                    // Floor
                     if (ball.y + ball.radius > canvas.height) {
                         ball.y = canvas.height - ball.radius;
-                        // Basic floor stabilization check
                          if (modes.noFriction || Math.abs(ball.vy) > currentTerrain.gravity * 2.5) {
                             ball.handleImpact(0, -1); bounced = true;
                         } else { ball.vy = 0; }
+                    } else if (ball.y - ball.radius < 0) {
+                        ball.y = ball.radius; ball.handleImpact(0, 1); bounced = true;
                     }
-                    // Ceiling
-                    else if (ball.y - ball.radius < 0) {
-                        ball.y = ball.radius;
-                        ball.handleImpact(0, 1); bounced = true;
-                    }
-                    // Walls
                     if (ball.x + ball.radius > canvas.width) {
-                        ball.x = canvas.width - ball.radius;
-                        ball.handleImpact(-1, 0); bounced = true;
+                        ball.x = canvas.width - ball.radius; ball.handleImpact(-1, 0); bounced = true;
                     } else if (ball.x - ball.radius < 0) {
-                        ball.x = ball.radius;
-                        ball.handleImpact(1, 0); bounced = true;
+                        ball.x = ball.radius; ball.handleImpact(1, 0); bounced = true;
                     }
                     return bounced;
                 }
             },
             circle: {
                 draw: (cx, cy, size) => {
-                    ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 3;
+                    currentTheme.containerStyle(ctx);
                     ctx.beginPath(); ctx.arc(cx, cy, size/2, 0, Math.PI*2); ctx.stroke();
                 },
                 check: (ball, cx, cy, size) => {
-                    const r = size/2;
-                    const dx = ball.x - cx;
-                    const dy = ball.y - cy;
-                    const dist = Math.sqrt(dx*dx + dy*dy);
+                    const r = size/2, dx = ball.x - cx, dy = ball.y - cy, dist = Math.sqrt(dx*dx + dy*dy);
                     if (dist + ball.radius > r) {
-                        // Collision! Normal is towards center
-                        const normal = normalize(-dx, -dy);
-                        // Push ball back inside
-                        const overlap = (dist + ball.radius) - r;
-                        ball.x += normal.x * overlap;
-                        ball.y += normal.y * overlap;
-                        ball.handleImpact(normal.x, normal.y);
-                        return true;
-                    }
-                    return false;
+                        const normal = normalize(-dx, -dy), overlap = (dist + ball.radius) - r;
+                        ball.x += normal.x * overlap; ball.y += normal.y * overlap;
+                        ball.handleImpact(normal.x, normal.y); return true;
+                    } return false;
                 }
             },
             square: {
                 draw: (cx, cy, size, angle = 0) => {
-                    ctx.save();
-                    ctx.translate(cx, cy);
-                    ctx.rotate(angle);
-                    ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 3;
+                    ctx.save(); ctx.translate(cx, cy); ctx.rotate(angle);
+                    currentTheme.containerStyle(ctx);
                     ctx.strokeRect(-size/2, -size/2, size, size);
                     ctx.restore();
                 },
                 check: (ball, cx, cy, size, angle = 0) => {
-                    // Rotate ball into square's local space to do simple AABB
-                    let local = rotate(ball.x - cx, ball.y - cy, -angle);
-                    let bounced = false;
-                    const half = size/2;
-
-                    if (local.x + ball.radius > half) {
-                        local.x = half - ball.radius;
-                        let n = rotate(-1, 0, angle); // Rotate normal back to world space
-                        ball.handleImpact(n.x, n.y); bounced = true;
-                    } else if (local.x - ball.radius < -half) {
-                        local.x = -half + ball.radius;
-                        let n = rotate(1, 0, angle);
-                        ball.handleImpact(n.x, n.y); bounced = true;
-                    }
-                    
-                    if (local.y + ball.radius > half) {
-                        local.y = half - ball.radius;
-                        let n = rotate(0, -1, angle);
-                        ball.handleImpact(n.x, n.y); bounced = true;
-                    } else if (local.y - ball.radius < -half) {
-                        local.y = -half + ball.radius;
-                        let n = rotate(0, 1, angle);
-                        ball.handleImpact(n.x, n.y); bounced = true;
-                    }
-
-                    if (bounced) {
-                        // Rotate position back to world space
-                        let world = rotate(local.x, local.y, angle);
-                        ball.x = cx + world.x;
-                        ball.y = cy + world.y;
-                    }
+                    let local = rotate(ball.x - cx, ball.y - cy, -angle), bounced = false, half = size/2;
+                    if (local.x + ball.radius > half) { local.x = half - ball.radius; let n = rotate(-1, 0, angle); ball.handleImpact(n.x, n.y); bounced = true; }
+                    else if (local.x - ball.radius < -half) { local.x = -half + ball.radius; let n = rotate(1, 0, angle); ball.handleImpact(n.x, n.y); bounced = true; }
+                    if (local.y + ball.radius > half) { local.y = half - ball.radius; let n = rotate(0, -1, angle); ball.handleImpact(n.x, n.y); bounced = true; }
+                    else if (local.y - ball.radius < -half) { local.y = -half + ball.radius; let n = rotate(0, 1, angle); ball.handleImpact(n.x, n.y); bounced = true; }
+                    if (bounced) { let world = rotate(local.x, local.y, angle); ball.x = cx + world.x; ball.y = cy + world.y; }
                     return bounced;
                 }
             },
             triangle: {
                  draw: (cx, cy, size) => {
                     const h = size * (Math.sqrt(3)/2);
-                    ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 3;
-                    ctx.beginPath();
-                    ctx.moveTo(cx, cy - 2*h/3);
-                    ctx.lineTo(cx - size/2, cy + h/3);
-                    ctx.lineTo(cx + size/2, cy + h/3);
-                    ctx.closePath();
-                    ctx.stroke();
+                    currentTheme.containerStyle(ctx);
+                    ctx.beginPath(); ctx.moveTo(cx, cy - 2*h/3); ctx.lineTo(cx - size/2, cy + h/3); ctx.lineTo(cx + size/2, cy + h/3); ctx.closePath(); ctx.stroke();
                 },
                 check: (ball, cx, cy, size) => {
-                    // Simplified equilateral triangle collision using plane distances
                     const h = size * (Math.sqrt(3)/2);
-                    // Vertices
-                    const v1 = {x: cx, y: cy - 2*h/3};
-                    const v2 = {x: cx - size/2, y: cy + h/3};
-                    const v3 = {x: cx + size/2, y: cy + h/3};
-                    
+                    const v1 = {x: cx, y: cy - 2*h/3}, v2 = {x: cx - size/2, y: cy + h/3}, v3 = {x: cx + size/2, y: cy + h/3};
                     let bounced = false;
-
-                    // Helper: Distance from point to line defined by normal and point on line
-                    // & Push out if needed
                     const checkPlane = (p1, p2) => {
-                        // Edge vector
-                        const dx = p2.x - p1.x;
-                        const dy = p2.y - p1.y;
-                        // Inward facing normal (-dy, dx) because of vertex ordering, normalized
-                        let nx = -dy;
-                        let ny = dx;
-                        const len = Math.sqrt(nx*nx + ny*ny);
-                        nx /= len; ny /= len;
-
-                        // Vector from p1 to ball
-                        const bx = ball.x - p1.x;
-                        const by = ball.y - p1.y;
-
-                        // Distance to plane (dot product)
-                        const dist = bx * nx + by * ny;
-
-                        if (dist < ball.radius) {
-                            // Collision
-                            const overlap = ball.radius - dist;
-                            ball.x += nx * overlap;
-                            ball.y += ny * overlap;
-                            ball.handleImpact(nx, ny);
-                            return true;
-                        }
+                        const dx = p2.x - p1.x, dy = p2.y - p1.y;
+                        let nx = -dy, ny = dx; const len = Math.sqrt(nx*nx + ny*ny); nx /= len; ny /= len;
+                        const dist = (ball.x - p1.x) * nx + (ball.y - p1.y) * ny;
+                        if (dist < ball.radius) { ball.x += nx * (ball.radius - dist); ball.y += ny * (ball.radius - dist); ball.handleImpact(nx, ny); return true; }
                         return false;
                     }
-
-                    // Check 3 edges
-                    if (checkPlane(v1, v2)) bounced = true; // Left edge
-                    if (!bounced && checkPlane(v2, v3)) bounced = true; // Bottom edge
-                    if (!bounced && checkPlane(v3, v1)) bounced = true; // Right edge
-
+                    if (checkPlane(v1, v2)) bounced = true; if (!bounced && checkPlane(v2, v3)) bounced = true; if (!bounced && checkPlane(v3, v1)) bounced = true;
                     return bounced;
                 }
             }
         };
-        // Alias rotating-square to square with angle
         containers['rotating-square'] = containers.square;
-
 
         // --- Game Objects ---
         class Ball {
             constructor(x, y, vx, vy, radius, color) {
                 this.x = x; this.y = y; this.vx = vx; this.vy = vy;
                 this.radius = radius;
-                this.color = color || `hsl(${Math.random() * 360}, 85%, 60%)`;
+                // If color not provided, generate based on current theme
+                this.color = color || currentTheme.ballColor(); 
                 this.lastMultiplyTime = 0;
             }
             draw() {
-                ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
-                ctx.fillStyle = this.color; ctx.fill(); ctx.closePath();
-                ctx.beginPath(); ctx.arc(this.x - this.radius*0.3, this.y - this.radius*0.3, this.radius*0.25, 0, Math.PI*2);
-                ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.fill(); ctx.closePath();
+                currentTheme.drawBall(ctx, this);
             }
             update() {
                 this.vy += currentTerrain.gravity;
                 if (!modes.noFriction) this.vx *= currentTerrain.friction;
                 this.x += this.vx; this.y += this.vy;
 
-                // Delegate collision to current container
-                const cx = canvas.width/2, cy = canvas.height/2;
-                const size = Math.min(canvas.width, canvas.height) * 0.7;
-
-                if (currentContainerType === 'window') {
-                    return containers.window.check(this);
-                } else if (currentContainerType === 'rotating-square') {
-                    return containers.square.check(this, cx, cy, size, containerAngle);
-                } else {
-                    return containers[currentContainerType].check(this, cx, cy, size);
-                }
+                const cx = canvas.width/2, cy = canvas.height/2, size = Math.min(canvas.width, canvas.height) * 0.7;
+                if (currentContainerType === 'window') return containers.window.check(this);
+                else if (currentContainerType === 'rotating-square') return containers.square.check(this, cx, cy, size, containerAngle);
+                else return containers[currentContainerType].check(this, cx, cy, size);
             }
 
             handleImpact(nx, ny) {
                 openAudioGate();
-
-                // Vector reflection: V_new = V - 2 * (V dot N) * N
-                // We also apply bounce factor here
                 let bounce = currentTerrain.bounce;
                 if (modes.superBounce) bounce = SUPER_BOUNCE_VAL;
                 if (modes.noFriction) bounce = 1.0;
@@ -451,19 +469,12 @@
                 this.vx = (this.vx - 2 * d * nx) * bounce;
                 this.vy = (this.vy - 2 * d * ny) * bounce;
 
-                // --- Modes ---
-                if (modes.speedUp) {
-                    this.vx *= 1.1; this.vy *= 1.1;
-                    this.vx = Math.max(Math.min(this.vx, 50), -50);
-                    this.vy = Math.max(Math.min(this.vy, 50), -50);
-                }
+                if (modes.speedUp) { this.vx *= 1.1; this.vy *= 1.1; this.vx = Math.max(Math.min(this.vx, 50), -50); this.vy = Math.max(Math.min(this.vy, 50), -50); }
                 if (modes.grow && this.radius < 60) this.radius *= 1.05;
                 if (modes.multiply) {
                     const now = Date.now();
-                    // Only split if moving fast enough
                     if ((Math.abs(this.vx) + Math.abs(this.vy) > 8) && now - this.lastMultiplyTime > 200) {
-                        this.lastMultiplyTime = now;
-                        return true; // signal spawn
+                        this.lastMultiplyTime = now; return true;
                     }
                 }
                 return false;
@@ -472,37 +483,28 @@
 
         // --- Main Loop ---
         function loop() {
-            // Trail effect
-            let hex = currentTerrain.bg;
-            let r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16);
-            ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 0.35)`;
+            // Theme-based background trail
+            ctx.fillStyle = currentTheme.fadeColor(currentTerrain);
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Update container state
             if (currentContainerType === 'rotating-square') containerAngle += 0.005;
 
-            // Draw Container
-            const cx = canvas.width/2, cy = canvas.height/2;
-            const size = Math.min(canvas.width, canvas.height) * 0.7;
-            if (currentContainerType === 'rotating-square') {
-                containers.square.draw(cx, cy, size, containerAngle);
-            } else if (currentContainerType !== 'window') {
-                containers[currentContainerType].draw(cx, cy, size);
-            }
+            const cx = canvas.width/2, cy = canvas.height/2, size = Math.min(canvas.width, canvas.height) * 0.7;
+            if (currentContainerType === 'rotating-square') containers.square.draw(cx, cy, size, containerAngle);
+            else if (currentContainerType !== 'window') containers[currentContainerType].draw(cx, cy, size);
 
-            // Update Balls
             let ballsToSpawn = 0;
             for (let i = 0; i < balls.length; i++) {
                 if (balls[i].update()) ballsToSpawn++;
                 balls[i].draw();
             }
 
-            // Handle Multiply
             if (ballsToSpawn > 0 && modes.multiply) {
-                let limit = Math.min(ballsToSpawn, 3); // tighter spawn limit
+                let limit = Math.min(ballsToSpawn, 3); 
                 for(let i=0; i<limit; i++) {
                     if (balls.length >= MAX_BALLS) break;
                     const p = balls[Math.floor(Math.random() * balls.length)];
+                    // Inherit color for themes where it matters
                     balls.push(new Ball(p.x, p.y, (Math.random()-0.5)*15, (Math.random()-0.5)*15, Math.max(8, p.radius*0.6), p.color));
                 }
                 document.getElementById('ballCount').textContent = `Balls: ${balls.length} (Max ${MAX_BALLS})`;
@@ -511,12 +513,9 @@
         }
 
         // --- Initialization & Events ---
-        function resizeCanvas() {
-            canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
-        }
+        function resizeCanvas() { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; }
         window.addEventListener('resize', resizeCanvas); resizeCanvas();
 
-        // Audio setup (same as V3, condensed for brevity)
         async function initAudio() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext||window.webkitAudioContext)();
@@ -556,15 +555,28 @@
            if(masterGain) masterGain.gain.value = e.target.value;
            document.getElementById('volValue').textContent = Math.round(e.target.value*100)+'%';
         });
+        
+        // --- Theme & Terrain Selectors ---
+        function updateEnvironment() {
+             // Use theme bg if it's a function that doesn't depend on terrain, or just overrides it
+             const newBg = currentTheme.bg(currentTerrain);
+             document.getElementById('canvasContainer').style.backgroundColor = newBg;
+        }
+
+        document.getElementById('themeSelect').addEventListener('change', (e) => {
+            currentTheme = THEMES[e.target.value];
+            updateEnvironment();
+            // Optional: re-colorize existing balls to match new theme
+             balls.forEach(b => b.color = currentTheme.ballColor());
+        });
         document.getElementById('terrainSelect').addEventListener('change', (e) => {
             currentTerrain = TERRAINS[e.target.value];
-            document.getElementById('canvasContainer').style.backgroundColor = currentTerrain.bg;
+            updateEnvironment();
         });
+
         document.getElementById('containerSelect').addEventListener('change', (e) => {
             currentContainerType = e.target.value;
-            // Clear balls when changing container to avoid them being stuck outside
-            balls = [];
-            document.getElementById('ballCount').textContent = `Balls: 0 (Max ${MAX_BALLS})`;
+            balls = []; document.getElementById('ballCount').textContent = `Balls: 0 (Max ${MAX_BALLS})`;
         });
         ['modeNoFriction','modeBounce','modeSpeed','modeGrow','modeMultiply'].forEach(id => {
             const el = document.getElementById(id);
@@ -574,25 +586,16 @@
             el.addEventListener('change', e => modes[prop] = e.target.checked);
         });
 
-        // Start/Interact
         const interact = async (e) => {
             e.preventDefault(); await initAudio();
             document.getElementById('tutorial').style.opacity = '0';
-            
-            // Spawn logic: try to spawn near center if using a container
             let x, y;
             if (currentContainerType === 'window') {
-                // Use click pos if window mode
                 const rect = canvas.getBoundingClientRect();
                 x = (e.clientX || e.touches[0].clientX) - rect.left;
                 y = (e.clientY || e.touches[0].clientY) - rect.top;
-                // if click was on button, use random
                 if (e.target.id === 'startBtn') { x = canvas.width/2; y = 100; }
-            } else {
-                // For shapes, just spawn exactly in center to be safe
-                x = canvas.width/2;
-                y = canvas.height/2;
-            }
+            } else { x = canvas.width/2; y = canvas.height/2; }
 
             if (balls.length < MAX_BALLS) {
                 balls.push(new Ball(x, y, (Math.random()-0.5)*10, Math.random()*5, 15+Math.random()*10));
